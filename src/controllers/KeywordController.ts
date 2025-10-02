@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { getDb } from "../configs/firebase"; // function that interacts with firebase
-import { Keyword } from "../models/keywords"; //Imports the keyword model
+import { Keyword } from "../models/keywords-scanner"; //Imports the keyword model
 import * as admin from "firebase-admin";
 
 const collectionName = "keywords"; // Sets Collection in Firebase Database
@@ -21,17 +21,17 @@ export const createKeyword = async (
     //Invokes and initialized function that interact with FireStore
     const db = getDb();
 
-    //Storing data values from client request
+    //Storing keyword values from client request
     const data: Keyword = req.body;
 
     // Ensures that name field is filled out
     if (!data.name) {
-      return res.status(404).json({ message: "Name field is required!" });
+      return res.status(404).json({ message: "Error! name is required!" });
     }
 
     //Sets each field value from client request
     const keyword: Keyword = {
-      name: data.name,
+      name: data.name.toLowerCase(),
       isActive: data.isActive ?? true, // Sets isActive field default value to true
       createdAt: admin.firestore.Timestamp.now(),
       updatedAt: admin.firestore.Timestamp.now(),
@@ -41,7 +41,7 @@ export const createKeyword = async (
     const keywordRef = db.collection(collectionName).doc();
     await keywordRef.set(keyword);
 
-    //Server response upon successful creation of record
+    //Response upon successful keyword creation
     res.status(201).json({
       id: keywordRef.id,
       name: keyword.name,
@@ -50,7 +50,7 @@ export const createKeyword = async (
       updatedAt: keyword.updatedAt?.toDate().toISOString(),
     });
   } catch (error) {
-    //If error occurs pass to error handler
+    //When error occurs, passes to error handler
     next(error);
   }
 };
@@ -79,7 +79,7 @@ export const getKeywords = async (
       limit = "10",
     } = req.query;
 
-    //Initializes and sets the possible sorting query
+    //Sets the all possible sorting query
     const allowedSortFields = ["name", "createdAt"];
     const sortField = allowedSortFields.includes(sortBy as string)
       ? (sortBy as string)
@@ -105,22 +105,23 @@ export const getKeywords = async (
       .limit(limitNum)
       .offset(offset);
 
-    // Gets and store the data from firebase and formats it accordingly
+    // Gets and stores the data from firebase and formats it accordingly
     const datas = await query.get();
     const keywords = datas.docs.map((data) => {
       const record = data.data();
       return {
         id: data.id,
-        ...record,
+        name: record?.name,
+        isActive: record?.isActive,
         createdAt: record.createdAt?.toDate().toISOString(),
         updatedAt: record.updatedAt?.toDate().toISOString(),
       };
     });
 
-    //Sends the data to client
+    //Sends the response to client
     res.json(keywords);
   } catch (error) {
-    //If error occurs pass to error handler
+    //When error occurs, passes to error handler
     next(error);
   }
 };
@@ -149,12 +150,13 @@ export const getKeywordById = async (
     const keyword = keywordSnap.data();
     res.json({
       id: keywordSnap.id,
-      ...keyword,
+      name: keyword?.name,
+      isActive: keyword?.isActive,
       createdAt: keyword?.createdAt.toDate().toISOString(),
       updatedAt: keyword?.updatedAt.toDate().toISOString(),
     });
   } catch (error) {
-    //If error occurs pass to error handler
+    //When error occurs, passes to error handler
     next(error);
   }
 };
@@ -185,12 +187,13 @@ export const updateKeyword = async (
     const keyword = updatedKeyword.data();
     res.json({
       id: updatedKeyword.id,
-      ...keyword,
+      name: keyword?.name,
+      isActive: keyword?.isActive,
       createdAt: keyword?.createdAt.toDate().toISOString(),
       updatedAt: keyword?.updatedAt.toDate().toISOString(),
     });
   } catch (error) {
-    //If error occurs pass to error handler
+    //When error occurs, passes to error handler
     next(error);
   }
 };
@@ -206,19 +209,34 @@ export const updateKeywordStatus = async (
     //Invokes and initialized function that interact with FireStore
     const db = getDb();
 
-    //Initialize document reference and fetch the appropriate data from firestore
+    //Initialize keyword reference and
     const keywordRef = db.collection(collectionName).doc(req.params.id);
+
+    // Limits request to only isActive field
+    const allowedField = ["isActive"];
+    const key = Object.keys(req.body);
+
+    if (key.length !== 1 || !allowedField.includes(key[0])) {
+      return res.status(400).json({
+        message: "Error! Exclusive for isActive field",
+      });
+    }
+
+    //Executes record patch
     await keywordRef.update({
       isActive: req.body.isActive,
       updatedAt: admin.firestore.Timestamp.now(),
     });
+
+    // fetch the appropriate data from firestore
     const updatedKeyword = await keywordRef.get();
 
     // Formats and sends the response json to client
     const keyword = updatedKeyword.data();
     res.json({
       id: updatedKeyword.id,
-      ...keyword,
+      name: keyword?.name,
+      isActive: keyword?.isActive,
       createdAt: keyword?.createdAt.toDate().toISOString(),
       updatedAt: keyword?.updatedAt.toDate().toISOString(),
     });
@@ -246,7 +264,7 @@ export const deleteKeyword = async (
     await keywordRef.delete();
 
     // Returns success message if keyword is successfully deleted
-    res.json({ message: "Successfully Deleted!" });
+    res.json({ message: "Keyword deleted." });
   } catch (error) {
     //If error occurs pass to error handler
     next(error);

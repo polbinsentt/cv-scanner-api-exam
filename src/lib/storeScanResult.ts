@@ -1,9 +1,9 @@
 import { getDb } from "../configs/firebase";
 import * as admin from "firebase-admin";
-import { Scan } from "../models/keywords";
+import { Scan } from "../models/keywords-scanner";
 
-const collectionName = "scanResults";
-export const storeResult = async (scan: Scan) => {
+const collectionName = "scan";
+export const storeScanResult = async (scan: Scan) => {
   try {
     const db = getDb();
     const scanRef = db.collection(collectionName).doc(scan.email);

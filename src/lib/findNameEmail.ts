@@ -1,5 +1,4 @@
-import { fetchActiveKeywords } from "./activeKeywords";
-
+// scans the cvtext for email
 export const findEmail = (text: string) => {
   const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
   const email = text.match(emailRegex);
@@ -10,6 +9,7 @@ export const findEmail = (text: string) => {
   return email[0];
 };
 
+//scans the cvtext for name
 export const findName = (text: string) => {
   const lines = text
     .split("\n")
@@ -24,18 +24,4 @@ export const findName = (text: string) => {
     }
   }
   return null;
-};
-
-export const keywordExist = async (text: string): Promise<string[]> => {
-  const activeKeywords = await fetchActiveKeywords();
-  const cvText = text.toLowerCase();
-
-  const matchedKeywords =
-    activeKeywords
-      ?.filter((keyword) =>
-        cvText.includes((keyword.name as string).toLowerCase())
-      )
-      .map((keyword) => keyword.name as string) || [];
-
-  return matchedKeywords;
 };
