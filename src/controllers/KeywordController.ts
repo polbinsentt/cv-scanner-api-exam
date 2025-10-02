@@ -41,8 +41,6 @@ export const createKeyword = async (
     const keywordRef = db.collection(collectionName).doc();
     await keywordRef.set(keyword);
 
-    await db.collection(collectionName).doc().set(keyword);
-
     //Server response upon successful creation of record
     res.status(201).json({
       id: keywordRef.id,

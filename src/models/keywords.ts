@@ -6,3 +6,12 @@ export interface Keyword {
   createdAt?: admin.firestore.Timestamp;
   updatedAt?: admin.firestore.Timestamp;
 }
+
+export interface Scan {
+  email: string;
+  extractedName: string | null;
+  matchedKeywords: string[] | [];
+  fullText: string;
+  scannedAt?: admin.firestore.Timestamp;
+  updatedAt?: admin.firestore.Timestamp;
+}
