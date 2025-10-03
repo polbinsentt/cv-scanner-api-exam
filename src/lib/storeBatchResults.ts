@@ -2,24 +2,24 @@ import { getDb } from "../configs/firebase";
 import * as admin from "firebase-admin";
 import { Scan } from "../models/keywords-scanner";
 
-const collectionName = "scan";
-export const storeScanResult = async (scan: Scan) => {
+const collectionName = "batch"; // Minimal change from storeScanResult function, just changed the collection name
+export const storeBatchResult = async (scan: Scan) => {
   try {
     const db = getDb();
-    const scanRef = db.collection(collectionName).doc(scan.email);
-    await scanRef.set({
+    const scanBatchRef = db.collection(collectionName).doc(scan.email);
+    await scanBatchRef.set({
       ...scan,
       scannedAt: admin.firestore.Timestamp.now(),
       updatedAt: admin.firestore.Timestamp.now(),
     });
     return {
-      id: scanRef.id,
+      id: scanBatchRef.id,
       ...scan,
       scannedAt: admin.firestore.Timestamp.now().toDate().toISOString(),
       updatedAt: admin.firestore.Timestamp.now().toDate().toISOString(),
     };
   } catch (err) {
-    console.error("Error saving scan:", err);
+    console.error("Error saving batch scan:", err);
     throw err;
   }
 };
