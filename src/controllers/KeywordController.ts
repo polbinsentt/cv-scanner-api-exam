@@ -271,6 +271,14 @@ export const deleteKeyword = async (
     // Initializes keyword reference id to be deleted
     const keywordRef = db.collection(collectionName).doc(req.params.id);
 
+    // Check if keyword exists
+    const deleteSnapshot = await keywordRef.get();
+    if (!deleteSnapshot.exists) {
+      return res
+        .status(404)
+        .json({ error: "Failed to delete! Keyword id not found!" });
+    }
+
     // Deletes the record from firebase
     await keywordRef.delete();
 
