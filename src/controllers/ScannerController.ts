@@ -42,6 +42,7 @@ export const scanCv = async (
     const result = await storeScanResult(scanData);
 
     // 6. Return the result.
+
     res.status(200).json(result);
   } catch (error) {
     next(error);

@@ -1,6 +1,6 @@
 import { getDb } from "../configs/firebase";
 
-// Gets all the active keywords from firestore
+// Gets all the active keywords from firestore to be use for finding match keywords function
 export const fetchActiveKeywords = async () => {
   try {
     const db = getDb();

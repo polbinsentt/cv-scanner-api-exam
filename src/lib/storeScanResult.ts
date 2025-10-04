@@ -2,6 +2,7 @@ import { getDb } from "../configs/firebase";
 import * as admin from "firebase-admin";
 import { Scan } from "../models/keywords-scanner";
 
+// Stores scan results to firebase
 const collectionName = "scan";
 export const storeScanResult = async (scan: Scan) => {
   try {

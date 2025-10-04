@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CV Scanner Basic UI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="index.js" defer></script>
+  </head>
+  <body class="h-screen">
+    <!-- basic navigation -->
+    <nav class="flex justify-center">
+      <div
+        class="border flex items-center justify-around w-28 py-2 rounded-lg mt-2"
+      >
+        <a href="index.html">
+          <i
+            data-lucide="search"
+            class="w-6 h-6 hover:scale-125 hover:stroke-[2] transition-all"
+          ></i
+        ></a>
+        <a href="keywords.html">
+          <i
+            data-lucide="key"
+            class="w-6 h-6 transition-all hover:scale-125"
+          ></i
+        ></a>
+      </div>
+    </nav>
+    <!-- parent container -->
+    <main
+      class="flex flex-col gap-2 w-3/5 shadow-2xl p-3 mx-auto translate-y-1/4"
+    >
+      <div>
+        <h1 class="text-3xl font-bold uppercase mb-4">Keywords LIST</h1>
+      </div>
+
+      <!-- subcontainer -->
+      <div
+        class="flex flex-col gap-4 h-[23rem] border shadow-xl rounded-sm p-3"
+      >
+        <div class="h-1/2">
+          <h2 class="text-lg font-bold opacity-70">Active</h2>
+          <div
+            class="border p-3 rounded-sm flex gap-1 h-4/5 overflow-auto flex-wrap"
+            id="activeKeywords"
+          ></div>
+        </div>
+        <div class="h-1/2">
+          <h2 class="text-lg font-bold opacity-70">Inactive</h2>
+          <div
+            class="border p-3 rounded-sm flex gap-1 h-4/5 overflow-auto flex-wrap"
+            id="inactiveKeywords"
+          ></div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>

@@ -29,9 +29,20 @@ export const createKeyword = async (
       return res.status(404).json({ message: "Error! name is required!" });
     }
 
+    // Checks if keyword is unique
+    const lowerCaseName = data.name.toLowerCase();
+    const querySnapshot = await db
+      .collection(collectionName)
+      .where("name", "==", lowerCaseName)
+      .get();
+
+    if (!querySnapshot.empty) {
+      return res.status(409).json({ message: "Error! name must be unique." });
+    }
+
     //Sets each field value from client request
     const keyword: Keyword = {
-      name: data.name.toLowerCase(),
+      name: lowerCaseName,
       isActive: data.isActive ?? true, // Sets isActive field default value to true
       createdAt: admin.firestore.Timestamp.now(),
       updatedAt: admin.firestore.Timestamp.now(),

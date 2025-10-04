@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CV Scanner Basic UI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="index.js" defer></script>
+  </head>
+  <body class="h-screen">
+    <!-- basic navigation -->
+    <nav class="flex justify-center mb-12">
+      <div
+        class="border flex items-center justify-around w-28 py-2 rounded-lg mt-2"
+      >
+        <a href="index.html">
+          <i
+            data-lucide="search"
+            class="w-6 h-6 hover:scale-125 hover:stroke-[2] transition-all"
+          ></i
+        ></a>
+        <a href="keywords.html">
+          <i
+            data-lucide="key"
+            class="w-6 h-6 transition-all hover:scale-125"
+          ></i
+        ></a>
+      </div>
+    </nav>
+    <!-- scanner parent container -->
+    <main
+      class="flex flex-col gap-2 w-3/4 h-[33rem] shadow-2xl rounded-sm p-5 mx-auto"
+    >
+      <div>
+        <h1 class="text-3xl font-bold uppercase">CV Scanner</h1>
+      </div>
+      <!-- subcontainer for scanner content -->
+      <div class="w-full h-full flex gap-2">
+        <div class="w-2/5 flex flex-col gap-3">
+          <!-- upload form container -->
+          <div class="w-full h-fit shadow-xl border p-3">
+            <h2 class="text-2xl mb-12 font-bold uppercase">Upload Form</h2>
+            <form id="cvFormUpload">
+              <div class="flex flex-col gap-6">
+                <div class="flex flex-col gap-2">
+                  <label for="cvUpload">Upload CV:</label>
+                  <input
+                    type="file"
+                    accept="application/pdf"
+                    id="cvFile"
+                    class="border p-1.5 border"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  class="bg-gray-950 py-1.5 w-fit mx-auto px-2.5 text-white font-bold rounded-sm hover:bg-gray-700 transition-all"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+          <!-- legends container -->
+          <div class="w-full shadow-2xl p-3 border rounded-sm">
+            <h2 class="text-xl font-bold uppercase">Legend</h2>
+            <div class="flex justify-evenly">
+              <div>
+                <h3 class="uppercase font-semibold">Icons</h3>
+                <ul class="flex flex-col items-center">
+                  <li><i data-lucide="square-user"></i></li>
+                  <li><i data-lucide="mail"></i></li>
+                  <li><i data-lucide="key-round"></i></li>
+                  <li><i data-lucide="file-text"></i></li>
+                </ul>
+              </div>
+              <div>
+                <h3 class="uppercase font-semibold">Description</h3>
+                <ul class="flex flex-col items-left">
+                  <li>Name</li>
+                  <li>Email</li>
+                  <li>Matched Keywords</li>
+                  <li>Full Text</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- results container -->
+        <div class="w-3/5 shadow-xl border rounded-sm p-3">
+          <h2 class="text-2xl font-bold uppercase mb-4">Scan Results</h2>
+          <div class="flex h-full p-1.5 flex-col gap-3 overflow-auto">
+            <div class="flex flex-col gap-3">
+              <span class="flex gap-2 items-center">
+                <i data-lucide="square-user" class="scale-125"></i>
+                <p id="name"></p>
+              </span>
+              <span class="flex gap-2 items-center">
+                <i data-lucide="mail" class="scale-125"></i>
+
+                <p id="email"></p>
+              </span>
+              <span class="flex gap-2 items-center">
+                <i data-lucide="key-round" class="scale-125"></i>
+                <p id="matchedKeywords"></p>
+              </span>
+            </div>
+
+            <span class="flex gap-4 items-start">
+              <i data-lucide="file-text" class="shrink-0 scale-125"></i>
+              <p
+                id="fullText"
+                class="max-h-64 overflow-auto break-words p-2 rounded"
+              ></p>
+            </span>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>
